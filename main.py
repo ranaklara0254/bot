@@ -1,17 +1,15 @@
+from google.colab import drive
 import os
 import time
-import requests
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from pyrogram.errors import FloodWait
 
-# Replace these with your own values
-API_ID = '5310709'
-API_HASH = '63a546bdaf18e2cbba99f87b4274fa05'
-BOT_TOKEN = '5436508081:AAEaiqF2JxmFf3RLZtybQh0QzqvOSVtyLYA'
+# Mount Google Drive
+drive.mount('/content/drive')
 
-# Directory to save downloaded files
-DOWNLOAD_DIR = 'downloads'
+# Directory to save downloaded files in Google Drive
+DOWNLOAD_DIR = '/content/drive/My Drive/downloads'
 
 # Ensure the download directory exists
 if not os.path.exists(DOWNLOAD_DIR):
@@ -73,13 +71,6 @@ async def download_file(client, message):
         )
 
         await progress_message.edit(f'File {file_name} has been downloaded to {download_path}')
-
-        # Upload the downloaded file to bashupload.com
-        files = {'file': open(download_path, 'rb')}
-        response = requests.post('https://bashupload.com/', files=files)
-
-        # Send the response back to the user
-        await message.reply_text(f'Upload response: {response.text}')
     except Exception as e:
         await message.reply_text(f'An error occurred: {e}')
 
